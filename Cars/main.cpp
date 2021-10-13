@@ -3,16 +3,13 @@
 #include <iostream>
 #include <iostream>
 using namespace std;
-#define EXPENSIVE 1
-#define POOR 0
+#define EXPENSIVE "EXPENSIVE"
+#define POOR "POOR"
 #define WHITE 0
 #define RED 1
 #define BLACK 2
 #define WITH -10
-/**
- * Каждый отдельный продукт семейства продуктов должен иметь базовый интерфейс.
- * Все вариации продукта должны реализовывать этот интерфейс.
- */
+
 class Car {
 public:
     virtual ~Car(){};
@@ -20,16 +17,11 @@ public:
     virtual string colorOfCar() const = 0;
     virtual int speedOfCar() const = 0;
     virtual int priceOfCar() const = 0;
-    virtual bool whatIsSalon() const = 0;
+    virtual string whatIsSalon() const = 0;
 };
 
-/**
- * Конкретные продукты создаются соответствующими Конкретными Фабриками.
- */
 class AudiCar : public Car {
 public:
-   // const string result = collaborator.UsefulCar();
-    //return "The result of the B1 collaborating with ( " + result + " )";
     string UsefulCar() const override {
       return "The Audi Car has created";
     }
@@ -42,7 +34,7 @@ public:
     int priceOfCar() const override {
       return 1000000;
     }
-    bool whatIsSalon() const override {
+    string whatIsSalon() const override {
       return POOR;
     }
     
@@ -61,7 +53,7 @@ public:
     int priceOfCar() const override {
       return 3000000;
     }
-    bool whatIsSalon() const override {
+    string whatIsSalon() const override {
       return EXPENSIVE;
     }
     
@@ -80,7 +72,7 @@ public:
     int priceOfCar() const override {
       return 3100005;
     }
-    bool whatIsSalon() const override {
+    string whatIsSalon() const override {
       return POOR;
     }
     
@@ -99,7 +91,7 @@ class BMWCar : public Car {
     int priceOfCar() const override {
       return 1000000;
     }
-    bool whatIsSalon() const override {
+    string whatIsSalon() const override {
       return POOR;
     }
 };
@@ -116,7 +108,7 @@ class BMWCar1 : public BMWCar {
     int priceOfCar() const override {
       return 5500000;
     }
-    bool whatIsSalon() const override {
+    string whatIsSalon() const override {
       return EXPENSIVE;
     }
 };
@@ -133,16 +125,11 @@ class BMWCar2 : public BMWCar {
     int priceOfCar() const override {
       return 5300000;
     }
-    bool whatIsSalon() const override {
+    string whatIsSalon() const override {
       return EXPENSIVE;
     }
 };
 
-/**
- * Базовый интерфейс другого продукта. Все продукты могут взаимодействовать друг
- * с другом, но правильное взаимодействие возможно только между продуктами одной
- * и той же конкретной вариации.
- */
 class Autobus {
 public:
     virtual ~Autobus(){};
@@ -152,9 +139,7 @@ public:
     virtual string AnotherUsefulBus(const Car &collaborator) const = 0;
 };
 
-/**
- * Конкретные Продукты создаются соответствующими Конкретными Фабриками.
- */
+
 class AudiBus : public Autobus {
 public:
     string UsefulBus() const override {
@@ -163,16 +148,13 @@ public:
     int countOfSeats() const override {
         return 28;
     }
-  /**
-   * Продукт B1 может корректно работать только с Продуктом A1. Тем не менее, он
-   * принимает любой экземпляр Абстрактного Продукта А в качестве аргумента.
-   */
+
   string AnotherUsefulBus(const Car &collaborator) const override {
     const string result = collaborator.colorOfCar();
       return "Audi bus was created with ( " + result + " )";
   }
 };
-//
+
 class BMWBus : public Autobus {
 public:
     string UsefulBus() const override {
@@ -181,29 +163,14 @@ public:
     int countOfSeats() const override {
         return 34;
     }
-  /**
-   * Продукт B1 может корректно работать только с Продуктом A1. Тем не менее, он
-   * принимает любой экземпляр Абстрактного Продукта А в качестве аргумента.
-   */
+
   string AnotherUsefulBus(const Car &collaborator) const override {
     const string result = collaborator.colorOfCar();
       return "BMW bus was created with ( " + result + " )";
   }
-  /**
-   * Продукт B2 может корректно работать только с Продуктом A2. Тем не менее, он
-   * принимает любой экземпляр Абстрактного Продукта А в качестве аргумента.
-   */
-
-  
+ 
 };
 
-/**
- * Интерфейс Абстрактной Фабрики объявляет набор методов, которые возвращают
- * различные абстрактные продукты. Эти продукты называются семейством и связаны
- * темой или концепцией высокого уровня. Продукты одного семейства обычно могут
- * взаимодействовать между собой. Семейство продуктов может иметь несколько
- * вариаций, но продукты одной вариации несовместимы с продуктами другой.
- */
 class AbstractFactory {
  public:
     virtual Car *CreateCarA() const = 0;
@@ -216,12 +183,6 @@ class AbstractFactory {
     virtual Autobus *CreateBusA() const = 0;
 };
 
-/**
- * Конкретная Фабрика производит семейство продуктов одной вариации. Фабрика
- * гарантирует совместимость полученных продуктов. Обратите внимание, что
- * сигнатуры методов Конкретной Фабрики возвращают абстрактный продукт, в то
- * время как внутри метода создается экземпляр конкретного продукта.
- */
 class ConcreteFactory1 : public AbstractFactory {
 public:
     Car *CreateCarA() const override {
@@ -252,10 +213,6 @@ public:
 
 };
 
-
-/**
- * Каждая Конкретная Фабрика имеет соответствующую вариацию продукта.
- */
 class ConcreteFactory2 : public AbstractFactory {
 public:
     Autobus *CreateBusA() const override {
@@ -265,12 +222,6 @@ public:
         return new BMWBus();
     }
 };
-
-/**
- * Клиентский код работает с фабриками и продуктами только через абстрактные
- * типы: Абстрактная Фабрика и Абстрактный Продукт. Это позволяет передавать
- * любой подкласс фабрики или продукта клиентскому коду, не нарушая его.
- */
 
 void ClientCode(const AbstractFactory &factory) {
     int anser = 0;
@@ -328,7 +279,7 @@ void ClientCode(const AbstractFactory &factory) {
                     break;
                 }
             }
-            
+            break;
         }
         case 2: {
             cout << "Would you like to buy a Audi(1) or BMW(2)?" << endl;
