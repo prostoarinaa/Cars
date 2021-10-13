@@ -17,7 +17,7 @@ class Car {
 public:
     virtual ~Car(){};
     virtual string UsefulCar() const = 0;
-    virtual int colorOfCar()  = 0;
+    virtual int colorOfCar() const = 0;
     virtual int speedOfCar()  = 0;
     virtual int priceOfCar() = 0;
     virtual bool whatIsSalon() = 0;
@@ -28,12 +28,12 @@ public:
  */
 class AudiCar : public Car {
 public:
-    const string result = collaborator.UsefulCar();
-    return "The result of the B1 collaborating with ( " + result + " )";
+   // const string result = collaborator.UsefulCar();
+    //return "The result of the B1 collaborating with ( " + result + " )";
     string UsefulCar() const override {
       return "The Audi Car has created";
     }
-    int colorOfCar() override {
+    int colorOfCar() const override {
       return WHITE;
     }
     int speedOfCar() override {
@@ -88,7 +88,7 @@ class BMWCar1 : public BMWCar {
     string UsefulCar() const override {
       return "The BMW Car type 1 has created";
     }
-    int colorOfCar() override {
+    int colorOfCar() const override {
       return BLACK;
     }
     int speedOfCar() override {
@@ -181,6 +181,7 @@ public:
     Car *CreateTypeCar() const override {
       return new AudiCar1();
     }
+    
     Car *CreateCar() const override {
         return new AudiCar();
     }
@@ -222,7 +223,8 @@ void ClientCode(const AbstractFactory &factory) {
     const Car *car = factory.CreateCar();
     const Car *car1 = factory.CreateTypeCar();
  // const Autobus *bus = factory.CreateBus();
-//  std::cout << bus->UsefulBus() << "\n";
+    cout << car->UsefulCar() << "\n";
+    cout << car1->UsefulCar() <<" "<< car1->colorOfCar() << "\n";
 //  std::cout << bus->AnotherUsefulBus(*car) << "\n";
     delete car;
     delete car1;
