@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
-#include <iostream>
-#include <iostream>
+#include <memory>
 using namespace std;
 #define EXPENSIVE "EXPENSIVE"
 #define POOR "POOR"
@@ -117,7 +116,7 @@ class BMWCar2 : public BMWCar {
       return "The BMW Car type 2 has created";
     }
     string colorOfCar() const override {
-      return WHITE;
+      return "WHITE";
     }
     int speedOfCar() const override {
       return 190;
@@ -222,60 +221,53 @@ public:
         return new BMWBus();
     }
 };
-
-void ClientCode(const AbstractFactory &factory) {
-    int anser = 0;
+void printCar(shared_ptr<Car> car1) {
+    cout << car1->UsefulCar() <<" with: \n"<< car1->colorOfCar() << "\n" << car1->colorOfCar() << "\n" << car1->speedOfCar() << "\n" << car1->priceOfCar() << "\n" << car1->whatIsSalon() << endl;
+};
+void printBus(shared_ptr<Autobus> bus1, shared_ptr<Car> car) {
+    cout << bus1->UsefulBus() <<" with: \n" << bus1->countOfSeats() << " seats\n" << bus1->AnotherUsefulBus(*car) << endl;
+};
+void ClientCode(shared_ptr<AbstractFactory> factory) {
+    int anser = 0, anser11 = 0, anser1 = 0, anser12 = 0, anserB = 0;
     cout << "Would you like to buy a Car(1) or Bus(2)?" << endl;
     cin >> anser;
     switch(anser) {
         case 1: {
-            int anser1 = 0;
             cout << "Would you like to buy a Audi(1) or BMW(2)?" << endl;
             cin >> anser1;
             switch(anser1) {
                 case 1: {
-                    int anser11 = 0;
-//                    const Car *car = factory.CreateCarA();
-//                    cout << car->UsefulCar() << "\n";
                     cout << "Would you like to buy a first complectation(1) or second complectation(2)?" << endl;
                     cin >> anser11;
                     switch(anser11) {
                         case 1: {
-                            const Car *car1 = factory.CreateCarA1();
-                            cout << car1->UsefulCar() <<" with: \n"<< car1->colorOfCar() << "\n" << car1->colorOfCar() << "\n" << car1->speedOfCar() << "\n" << car1->priceOfCar() << "\n" << car1->whatIsSalon() << endl;
-                           // delete car;
-                            delete car1;break;
+                            shared_ptr<Car> car1(factory->CreateCarA1());
+                            printCar(car1);
+                            break;
                         }
                         case 2: {
-                            const Car *car1 = factory.CreateCarA2();
-                            cout << car1->UsefulCar() <<" with: \n"<< car1->colorOfCar() << "\n" << car1->colorOfCar() << "\n" << car1->speedOfCar() << "\n" << car1->priceOfCar() << "\n" << car1->whatIsSalon() << endl;
-                           // delete car;
-                            delete car1;break;
+                            shared_ptr<Car> car1(factory->CreateCarA2());
+                            printCar(car1);
+                            break;
                         }
                     }
-                  //  delete car;
                     break;
                 }
                 case 2: {
-                    int anser12 = 0;
-
                     cout << "Would you like to buy a first complectation(1) or second complectation(2)?" << endl;
                     cin >> anser12;
                     switch(anser12) {
                         case 1: {
-                            const Car *car1 = factory.CreateCarB1();
-                            cout << car1->UsefulCar() <<" with: \n"<< car1->colorOfCar() << "\n" << car1->colorOfCar() << "\n" << car1->speedOfCar() << "\n" << car1->priceOfCar() << "\n" << car1->whatIsSalon() << endl;
-                           
-                            delete car1; break;
+                            shared_ptr<Car> car1(factory->CreateCarB1());
+                            printCar(car1);
+                             break;
                         }
                         case 2: {
-                            const Car *car1 = factory.CreateCarB2();
-                            cout << car1->UsefulCar() <<" with: \n"<< car1->colorOfCar() << "\n" << car1->colorOfCar() << "\n" << car1->speedOfCar() << "\n" << car1->priceOfCar() << "\n" << car1->whatIsSalon() << endl;
-                            
-                            delete car1;break;
+                            shared_ptr<Car> car1(factory->CreateCarB2());
+                            printCar(car1);
+                            break;
                         }
                     }
-                  //  delete car;
                     break;
                 }
             }
@@ -283,23 +275,18 @@ void ClientCode(const AbstractFactory &factory) {
         }
         case 2: {
             cout << "Would you like to buy a Audi(1) or BMW(2)?" << endl;
-            int anserB = 0;
             cin >> anserB;
             switch(anserB) {
                 case 1: {
-                    const Autobus *bus1 = factory.CreateBusA();
-                    const Car *car = factory.CreateCarA();
-                    cout << bus1->UsefulBus() <<" with: \n" << bus1->countOfSeats() << " seats\n" << bus1->AnotherUsefulBus(*car) << endl;
-                    delete bus1;
-                    delete car;
+                    shared_ptr<Autobus> bus1(factory->CreateBusA());
+                    shared_ptr<Car> car1(factory->CreateCarA());
+                    printBus(bus1,car1);
                     break;
                 }
                 case 2: {
-                    const Autobus *bus1 = factory.CreateBusB();
-                    const Car *car = factory.CreateCarB();
-                    cout << bus1->UsefulBus() <<" with: \n" << bus1->countOfSeats() << " seats\n" << bus1->AnotherUsefulBus(*car) << endl;
-                    delete bus1;
-                    delete car;
+                    shared_ptr<Autobus> bus1(factory->CreateBusB());
+                    shared_ptr<Car> car1(factory->CreateCarB());
+                    printBus(bus1,car1);
                     break;
                 }
             }
@@ -311,9 +298,8 @@ void ClientCode(const AbstractFactory &factory) {
 
 int main() {
     cout << "The dialog with customer: \n";
-    ConcreteFactory1 *f1 = new ConcreteFactory1();
-    ClientCode(*f1);
-    delete f1;
+    shared_ptr<AbstractFactory> f1(new ConcreteFactory1());
+    ClientCode(f1);
   return 0;
 }
 
